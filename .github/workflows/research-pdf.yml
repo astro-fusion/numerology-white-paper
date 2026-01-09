@@ -1,0 +1,231 @@
+name: Research PDF Generation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'manuscript.qmd'
+      - 'src/**'
+      - '_quarto.yml'
+      - 'references.bib'
+  pull_request:
+    paths:
+      - 'manuscript.qmd'
+      - 'src/**'
+      - '_quarto.yml'
+      - 'references.bib'
+  workflow_dispatch:
+    inputs:
+      birth_date:
+        description: 'Birth date for analysis (YYYY-MM-DD)'
+        required: false
+        default: '1984-08-27'
+      birth_time:
+        description: 'Birth time (HH:MM)'
+        required: false
+        default: '10:30'
+      latitude:
+        description: 'Birth latitude'
+        required: false
+        default: '28.6139'
+      longitude:
+        description: 'Birth longitude'
+        required: false
+        default: '77.1025'
+      generate_reports:
+        description: 'Generate additional research reports'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  build-research-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+      with:
+        tinytex: true
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libswisseph-dev
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install pyswisseph>=2.08.00 matplotlib seaborn plotly numpy pandas
+
+    - name: Generate dynamic research content
+      run: |
+        python -c "
+        from vedic_numerology import analyze_birth_chart
+        import matplotlib
+        matplotlib.use('Agg')
+
+        # Use workflow inputs or defaults
+        birth_date = '${{ github.event.inputs.birth_date || \"1984-08-27\" }}'
+        birth_time = '${{ github.event.inputs.birth_time || \"10:30\" }}'
+        latitude = float('${{ github.event.inputs.latitude || \"28.6139\" }}')
+        longitude = float('${{ github.event.inputs.longitude || \"77.1025\" }}')
+
+        print(f'Generating analysis for: {birth_date} {birth_time}')
+        print(f'Location: {latitude}°N, {longitude}°E')
+
+        # Generate comprehensive analysis
+        analysis = analyze_birth_chart(birth_date, birth_time, latitude, longitude)
+
+        # Save detailed results for manuscript inclusion
+        results = analysis.analyze_support_contradiction()
+
+        # Create results file for Quarto to include
+        with open('research_results.json', 'w') as f:
+            import json
+            json.dump({
+                'birth_data': {
+                    'date': birth_date,
+                    'time': birth_time,
+                    'latitude': latitude,
+                    'longitude': longitude
+                },
+                'numerology': {
+                    'mulanka': analysis.calculate_mulanka(),
+                    'bhagyanka': analysis.calculate_bhagyanka()
+                },
+                'support_analysis': results
+            }, f, indent=2, default=str)
+
+        # Generate visualization figures
+        try:
+            # Comparison chart
+            fig1 = analysis.plot_numerology_comparison(use_plotly=False)
+            fig1.savefig('figures/mulanka_bhagyanka_comparison.png', dpi=300, bbox_inches='tight')
+            plt.close(fig1)
+
+            # Dignity radar chart
+            fig2 = analysis.plot_dignity_analysis(use_plotly=False)
+            fig2.savefig('figures/dignity_analysis.png', dpi=300, bbox_inches='tight')
+            plt.close(fig2)
+
+            # Time series support (if time data available)
+            try:
+                fig3 = analysis.plot_temporal_support('2024-01-01', '2024-12-31', use_plotly=False)
+                fig3.savefig('figures/temporal_support.png', dpi=300, bbox_inches='tight')
+                plt.close(fig3)
+            except Exception as e:
+                print(f'Temporal analysis not available: {e}')
+
+            print('All visualizations generated successfully')
+
+        except Exception as e:
+            print(f'Visualization generation failed: {e}')
+            import traceback
+            traceback.print_exc()
+        "
+
+    - name: Render research manuscript to PDF
+      run: |
+        echo "Rendering manuscript with dynamic research content..."
+        quarto render manuscript.qmd --to pdf --pdf-engine lualatex
+        ls -la *.pdf
+
+    - name: Generate additional research reports
+      if: github.event.inputs.generate_reports == 'true' || github.event_name != 'workflow_dispatch'
+      run: |
+        python -c "
+        from vedic_numerology import analyze_birth_chart
+        import json
+
+        # Load the generated research results
+        try:
+            with open('research_results.json', 'r') as f:
+                data = json.load(f)
+
+            analysis = analyze_birth_chart(
+                data['birth_data']['date'],
+                data['birth_data']['time'],
+                data['birth_data']['latitude'],
+                data['birth_data']['longitude']
+            )
+
+            # Generate comprehensive report
+            report = analysis.generate_report()
+            with open('comprehensive_analysis_report.txt', 'w') as f:
+                f.write(report)
+
+            # Generate summary statistics
+            support_data = data['support_analysis']
+            summary = f'''
+        # Vedic Numerology-Astrology Analysis Summary
+
+        ## Birth Data
+        - Date: {data['birth_data']['date']}
+        - Time: {data['birth_data']['time']}
+        - Location: {data['birth_data']['latitude']}°N, {data['birth_data']['longitude']}°E
+
+        ## Numerology Results
+        - Mulanka: {data['numerology']['mulanka']['number']} ({data['numerology']['mulanka']['planet']})
+        - Bhagyanka: {data['numerology']['bhagyanka']['number']} ({data['numerology']['bhagyanka']['planet']})
+
+        ## Support Analysis
+        - Mulanka Support: {support_data['mulanka']['support_level']} ({support_data['mulanka']['score']:.1f}/100)
+        - Bhagyanka Support: {support_data['bhagyanka']['support_level']} ({support_data['bhagyanka']['score']:.1f}/100)
+        - Overall Harmony: {support_data['overall']['harmony_level']}
+        - Average Score: {support_data['overall']['average_score']:.1f}/100
+
+        ## Dignity Details
+        ### Mulanka ({support_data['mulanka']['planet']})
+        - Dignity Type: {support_data['mulanka']['dignity_type']}
+        - Detailed Score: {support_data['mulanka']['score']:.1f}/100
+
+        ### Bhagyanka ({support_data['bhagyanka']['planet']})
+        - Dignity Type: {support_data['bhagyanka']['dignity_type']}
+        - Detailed Score: {support_data['bhagyanka']['score']:.1f}/100
+
+        ---
+        Generated by Vedic Numerology-Astrology Integration System
+        Research Date: $(date)
+            '''
+
+            with open('analysis_summary.md', 'w') as f:
+                f.write(summary)
+
+            print('Additional research reports generated')
+
+        except Exception as e:
+            print(f'Report generation failed: {e}')
+        "
+
+    - name: Upload research PDF
+      uses: actions/upload-artifact@v3
+      with:
+        name: research-manuscript-pdf
+        path: manuscript.pdf
+
+    - name: Upload research data and reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: research-data-reports
+        path: |
+          research_results.json
+          comprehensive_analysis_report.txt
+          analysis_summary.md
+          figures/*.png
+
+    - name: Upload PDF to GitHub Pages (optional)
+      if: github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v3
+      with:
+        name: github-pages-pdf
+        path: manuscript.pdf
+        retention-days: 30

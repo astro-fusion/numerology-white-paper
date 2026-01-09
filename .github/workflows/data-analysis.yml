@@ -1,0 +1,238 @@
+name: Data Analysis & Report Generation
+
+on:
+  workflow_dispatch:
+    inputs:
+      analysis_type:
+        description: 'Type of analysis to perform'
+        required: true
+        default: 'comprehensive'
+        type: choice
+        options:
+        - comprehensive
+        - numerology-only
+        - astrology-only
+        - comparative-study
+      birth_dates:
+        description: 'Birth dates to analyze (comma-separated YYYY-MM-DD)'
+        required: false
+        default: '1984-08-27'
+      output_format:
+        description: 'Output format for reports'
+        required: false
+        default: 'both'
+        type: choice
+        options:
+        - json
+        - text
+        - both
+      include_visualizations:
+        description: 'Generate visualizations'
+        required: false
+        default: true
+        type: boolean
+  schedule:
+    # Run weekly comprehensive analysis
+    - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
+
+jobs:
+  analyze-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libswisseph-dev
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install pyswisseph>=2.08.00 matplotlib seaborn plotly numpy pandas
+
+    - name: Run data analysis
+      run: |
+        python -c "
+        import os
+        import json
+        from datetime import datetime
+        from vedic_numerology import analyze_birth_chart, VedicNumerologyAstrology
+        import matplotlib
+        matplotlib.use('Agg')
+
+        # Get workflow inputs
+        analysis_type = '${{ github.event.inputs.analysis_type || \"comprehensive\" }}'
+        birth_dates_input = '${{ github.event.inputs.birth_dates || \"1984-08-27\" }}'
+        output_format = '${{ github.event.inputs.output_format || \"both\" }}'
+        include_viz = '${{ github.event.inputs.include_visualizations || \"true\" }}'
+
+        print(f'Analysis Type: {analysis_type}')
+        print(f'Birth Dates: {birth_dates_input}')
+        print(f'Output Format: {output_format}')
+        print(f'Include Visualizations: {include_viz}')
+
+        # Parse birth dates
+        birth_dates = [date.strip() for date in birth_dates_input.split(',')]
+
+        # Create output directory
+        os.makedirs('analysis_results', exist_ok=True)
+
+        results = []
+
+        for birth_date in birth_dates:
+            print(f'\\nAnalyzing: {birth_date}')
+
+            try:
+                # Perform analysis based on type
+                if analysis_type == 'numerology-only':
+                    # Basic numerology analysis
+                    analysis = analyze_birth_chart(birth_date)
+                    numerology = {
+                        'mulanka': analysis.calculate_mulanka(),
+                        'bhagyanka': analysis.calculate_bhagyanka()
+                    }
+                    result = {
+                        'birth_date': birth_date,
+                        'analysis_type': 'numerology',
+                        'numerology': numerology
+                    }
+
+                elif analysis_type == 'astrology-only':
+                    # Astrology only (would need time/location)
+                    analysis = analyze_birth_chart(birth_date, '12:00', 28.6139, 77.1025)
+                    chart = analysis.chart
+                    result = {
+                        'birth_date': birth_date,
+                        'analysis_type': 'astrology',
+                        'planetary_positions': chart.planets,
+                        'ascendant': chart.ascendant
+                    }
+
+                elif analysis_type == 'comparative-study':
+                    # Compare multiple analysis methods
+                    analyses = []
+
+                    # Standard analysis
+                    std_analysis = analyze_birth_chart(birth_date, '12:00', 28.6139, 77.1025)
+                    analyses.append({
+                        'method': 'standard',
+                        'results': std_analysis.analyze_support_contradiction()
+                    })
+
+                    # Alternative Ayanamsa
+                    alt_analysis = VedicNumerologyAstrology(
+                        birth_date, '12:00', 28.6139, 77.1025,
+                        ayanamsa_system='raman'
+                    )
+                    analyses.append({
+                        'method': 'raman_ayanamsa',
+                        'results': alt_analysis.analyze_support_contradiction()
+                    })
+
+                    result = {
+                        'birth_date': birth_date,
+                        'analysis_type': 'comparative',
+                        'comparisons': analyses
+                    }
+
+                else:  # comprehensive
+                    # Full analysis
+                    analysis = analyze_birth_chart(birth_date, '12:00', 28.6139, 77.1025)
+                    full_results = analysis.analyze_support_contradiction()
+                    report = analysis.generate_report()
+
+                    result = {
+                        'birth_date': birth_date,
+                        'analysis_type': 'comprehensive',
+                        'support_analysis': full_results,
+                        'report': report
+                    }
+
+                    # Generate visualizations if requested
+                    if include_viz == 'true':
+                        try:
+                            fig1 = analysis.plot_numerology_comparison(use_plotly=False)
+                            fig1.savefig(f'analysis_results/{birth_date.replace(\"-\", \"_\")}_comparison.png', dpi=150, bbox_inches='tight')
+                            plt.close(fig1)
+
+                            fig2 = analysis.plot_dignity_analysis(use_plotly=False)
+                            fig2.savefig(f'analysis_results/{birth_date.replace(\"-\", \"_\")}_dignity.png', dpi=150, bbox_inches='tight')
+                            plt.close(fig2)
+
+                            print(f'Visualizations generated for {birth_date}')
+
+                        except Exception as e:
+                            print(f'Visualization failed for {birth_date}: {e}')
+
+                results.append(result)
+                print(f'Completed analysis for {birth_date}')
+
+            except Exception as e:
+                print(f'Analysis failed for {birth_date}: {e}')
+                results.append({
+                    'birth_date': birth_date,
+                    'error': str(e),
+                    'timestamp': datetime.now().isoformat()
+                })
+
+        # Save results
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+        if output_format in ['json', 'both']:
+            with open(f'analysis_results/analysis_results_{timestamp}.json', 'w') as f:
+                json.dump({
+                    'metadata': {
+                        'analysis_type': analysis_type,
+                        'birth_dates': birth_dates,
+                        'timestamp': timestamp,
+                        'include_visualizations': include_viz
+                    },
+                    'results': results
+                }, f, indent=2, default=str)
+
+        if output_format in ['text', 'both']:
+            with open(f'analysis_results/analysis_report_{timestamp}.txt', 'w') as f:
+                f.write(f'Vedic Numerology-Astrology Analysis Report\\n')
+                f.write(f'Generated: {datetime.now().isoformat()}\\n')
+                f.write(f'Analysis Type: {analysis_type}\\n')
+                f.write(f'Birth Dates: {\", \".join(birth_dates)}\\n')
+                f.write('=' * 60 + '\\n\\n')
+
+                for result in results:
+                    if 'error' in result:
+                        f.write(f'ERROR for {result[\"birth_date\"]}: {result[\"error\"]}\\n\\n')
+                        continue
+
+                    f.write(f'Analysis for {result[\"birth_date\"]}\\n')
+                    f.write('-' * 30 + '\\n')
+
+                    if result['analysis_type'] == 'numerology':
+                        num = result['numerology']
+                        f.write(f'Mulanka: {num[\"mulanka\"][\"number\"]} ({num[\"mulanka\"][\"planet\"]})\\n')
+                        f.write(f'Bhagyanka: {num[\"bhagyanka\"][\"number\"]} ({num[\"bhagyanka\"][\"planet\"]})\\n')
+
+                    elif result['analysis_type'] == 'comprehensive':
+                        support = result['support_analysis']
+                        f.write(f'Mulanka Support: {support[\"mulanka\"][\"support_level\"]} ({support[\"mulanka\"][\"score\"]:.1f}/100)\\n')
+                        f.write(f'Bhagyanka Support: {support[\"bhagyanka\"][\"support_level\"]} ({support[\"bhagyanka\"][\"score\"]:.1f}/100)\\n')
+                        f.write(f'Overall Harmony: {support[\"overall\"][\"harmony_level\"]}\\n')
+
+                    f.write('\\n')
+
+        print(f'\\nAnalysis complete. Results saved to analysis_results/')
+        print(f'Generated {len(results)} analysis reports')
+        "
+
+    - name: Upload analysis results
+      uses: actions/upload-artifact@v3
+      with:
+        name: data-analysis-results-${{ github.run_number }}
+        path: analysis_results/

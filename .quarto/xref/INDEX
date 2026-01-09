@@ -1,0 +1,36 @@
+{
+  "test.qmd": {
+    "test.embed.ipynb": "5e4f7c88",
+    "test.out.ipynb": "778c7ea3",
+    "test-preview.html": "6fc60e78",
+    "test.subarticle.xml": "ed99c14e"
+  },
+  "index_simple.qmd": {
+    "index_simple.embed.ipynb": "594d27b4",
+    "index_simple.out.ipynb": "11f1a54f",
+    "index_simple-preview.html": "87ced799",
+    "index_simple.subarticle.xml": "e4872423"
+  },
+  "index_working.qmd": {
+    "index_working.embed.ipynb": "8d76c2fc",
+    "index_working.out.ipynb": "94665ef4",
+    "index_working-preview.html": "2d681ce8"
+  },
+  "manuscript.qmd": {
+    "manuscript.embed.ipynb": "9218e105",
+    "manuscript.out.ipynb": "6d386e96",
+    "manuscript-preview.html": "2b014544",
+    "manuscript.tex": "a7166a18"
+  },
+  "index.qmd": {
+    "index.embed.ipynb": "f7e50967",
+    "index.out.ipynb": "fb25ba49",
+    "index-preview.html": "efd20b0b",
+    "index.subarticle.xml": "e884f1d9"
+  },
+  "simple_manuscript.qmd": {
+    "simple_manuscript.embed.ipynb": "ae4c6ab5",
+    "simple_manuscript.out.ipynb": "73a9cdef",
+    "simple_manuscript-preview.html": "f9f5325d"
+  }
+}

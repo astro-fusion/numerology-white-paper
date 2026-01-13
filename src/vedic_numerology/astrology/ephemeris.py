@@ -128,11 +128,13 @@ class EphemerisEngine:
             planet = self._planet_name_to_constant(planet)
 
         # Calculate position using Swiss Ephemeris
-        # swe.calc_ut returns: (longitude, latitude, distance, speed_longitude, speed_latitude, speed_distance)
+        # swe.calc_ut returns: ((longitude, latitude, distance, speed_longitude, speed_latitude, speed_distance), rflag)
         result = swe.calc_ut(julian_day, planet)
-
-        longitude, latitude, distance = result[0], result[1], result[2]
-        speed_longitude = result[3]
+        
+        # Unpack coordinates from the first element of the result tuple
+        coordinates = result[0]
+        longitude, latitude, distance = coordinates[0], coordinates[1], coordinates[2]
+        speed_longitude = coordinates[3]
 
         # Handle sidereal conversion if not using built-in sidereal mode
         if not self.sidereal_mode_set:
@@ -151,7 +153,9 @@ class EphemerisEngine:
 
         # Check combustion (within 8 degrees of Sun)
         sun_result = swe.calc_ut(julian_day, swe.SUN)
-        sun_longitude = sun_result[0]
+        sun_coordinates = sun_result[0]
+        sun_longitude = sun_coordinates[0]
+        
         if not self.sidereal_mode_set:
             sun_longitude = convert_tropical_to_sidereal(sun_longitude, ayanamsa)
 

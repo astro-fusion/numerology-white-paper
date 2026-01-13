@@ -1,16 +1,11 @@
 ---
 title: "Test Document"
-author: "Test Author"
 ---
 
 # Test
 
-This is a test document to check if Quarto is working.
+This is a test document to check if Quarto PDF generation works.
 
-## Section 1
-
-Some content here.
-
-## Section 2
-
-More content.
+```{python}
+print("Hello from Python!")
+```

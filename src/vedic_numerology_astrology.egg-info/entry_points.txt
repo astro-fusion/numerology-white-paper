@@ -1,3 +1,2 @@
 [console_scripts]
 vedic-numerology = vedic_numerology.cli:main
-

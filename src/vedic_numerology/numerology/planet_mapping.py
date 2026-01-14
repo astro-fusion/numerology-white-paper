@@ -9,10 +9,9 @@ which planetary positions are evaluated for support/contradiction analysis.
 """
 
 from enum import Enum
-from typing import Dict, Optional, Union
+from typing import Dict, Union
 
 from ..config.constants import PLANET_NAMES, Planet
-
 
 # Vedic Number-to-Planet Mapping
 # This is the core mapping that differentiates Vedic from Western numerology
@@ -47,7 +46,7 @@ NUMBER_QUALITIES: Dict[int, str] = {
 }
 
 
-def get_planet_from_number(number: int) -> Optional[Planet]:
+def get_planet_from_number(number: int) -> Planet:
     """
     Get the planet associated with a numerological number.
 
@@ -55,7 +54,7 @@ def get_planet_from_number(number: int) -> Optional[Planet]:
         number: Numerological number (1-9)
 
     Returns:
-        Planet enum value, or None if number is invalid
+        Planet enum value
 
     Raises:
         ValueError: If number is not in valid range (1-9)

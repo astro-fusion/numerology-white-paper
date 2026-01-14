@@ -56,7 +56,7 @@ class EphemerisEngine:
                 "For Google Colab: pip install pyswisseph"
             )
 
-    def _initialize_swisseph(self):
+    def _initialize_swisseph(self) -> None:
         """Initialize Swiss Ephemeris with proper settings."""
         # Set ephemeris path if needed (usually not required in modern installations)
         try:
@@ -232,7 +232,7 @@ class EphemerisEngine:
             True if planet is retrograde
         """
         position_data = self.get_planet_position(julian_day, planet)
-        return position_data["retrograde"]
+        return bool(position_data["retrograde"])
 
     def is_combust(self, julian_day: float, planet: Union[int, str]) -> bool:
         """
@@ -246,7 +246,7 @@ class EphemerisEngine:
             True if planet is combust
         """
         position_data = self.get_planet_position(julian_day, planet)
-        return position_data["combust"]
+        return bool(position_data["combust"])
 
     def get_all_planet_positions(self, julian_day: float) -> Dict[str, Dict]:
         """
@@ -323,7 +323,7 @@ class EphemerisEngine:
                 f"Unknown planet '{planet_name}'. Valid names: {valid_names}"
             )
 
-        return name_to_const[planet_lower]
+        return int(name_to_const[planet_lower])
 
     def get_ephemeris_info(self) -> Dict:
         """

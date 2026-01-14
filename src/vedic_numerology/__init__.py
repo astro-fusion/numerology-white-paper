@@ -92,8 +92,8 @@ class VedicNumerologyAstrology:
             )
 
         # Initialize components
-        self._numerology_data = None
-        self._chart = None
+        self._numerology_data: Optional[Dict[str, Any]] = None
+        self._chart: Optional[BirthChart] = None
         self._dignity_scorer = DignityScorer()
 
         # Validate coordinates
@@ -135,7 +135,6 @@ class VedicNumerologyAstrology:
                 f"birth_time must be string or time object, got {type(birth_time)}"
             )
 
-
     def _validate_coordinates(self):
         """Validate latitude and longitude coordinates."""
         if not (-90 <= self.latitude <= 90):
@@ -176,7 +175,7 @@ class VedicNumerologyAstrology:
         Returns:
             Dictionary with Mulanka data including number, planet, and correction status
         """
-        return self.numerology_data["mulanka"]
+        return dict(self.numerology_data["mulanka"])
 
     def calculate_bhagyanka(self) -> Dict[str, Any]:
         """
@@ -185,7 +184,7 @@ class VedicNumerologyAstrology:
         Returns:
             Dictionary with Bhagyanka data including number and planet
         """
-        return self.numerology_data["bhagyanka"]
+        return dict(self.numerology_data["bhagyanka"])
 
     def score_dignity(self, planet: Union[Planet, str]) -> Dict[str, Any]:
         """
@@ -284,7 +283,7 @@ class VedicNumerologyAstrology:
         end_date: Optional[datetime] = None,
         planet: Optional[Union[Planet, str]] = None,
         use_plotly: bool = True,
-    ):
+    ) -> Any:
         """
         Create temporal support visualization for numerology planet.
 
@@ -326,7 +325,7 @@ class VedicNumerologyAstrology:
             use_plotly,
         )
 
-    def plot_numerology_comparison(self, use_plotly: bool = True):
+    def plot_numerology_comparison(self, use_plotly: bool = True) -> Any:
         """
         Create comparison chart of Mulanka vs Bhagyanka dignity scores.
 
@@ -352,7 +351,7 @@ class VedicNumerologyAstrology:
 
     def plot_dignity_analysis(
         self, planet: Optional[Union[Planet, str]] = None, use_plotly: bool = True
-    ):
+    ) -> Any:
         """
         Create radar chart showing dignity factors for a planet.
 

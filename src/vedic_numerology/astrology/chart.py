@@ -53,7 +53,9 @@ class BirthChart:
 
         # Validate coordinates
         if not (-90 <= self.latitude <= 90):
-            raise ValueError(f"Latitude must be between -90 and 90, got {self.latitude}")
+            raise ValueError(
+                f"Latitude must be between -90 and 90, got {self.latitude}"
+            )
         if not (-180 <= self.longitude <= 180):
             raise ValueError(
                 f"Longitude must be between -180 and 180, got {self.longitude}"
@@ -66,10 +68,10 @@ class BirthChart:
         self.julian_day = self.ephemeris.datetime_to_julian_day(birth_datetime)
 
         # Chart data (calculated on demand)
-        self._ascendant = None
-        self._houses = None
-        self._planets = None
-        self._ayanamsa = None
+        self._ascendant: Optional[Dict] = None
+        self._houses: Optional[List[Dict]] = None
+        self._planets: Optional[Dict[str, Dict]] = None
+        self._ayanamsa: Optional[float] = None
 
     @property
     def ascendant(self) -> Dict:

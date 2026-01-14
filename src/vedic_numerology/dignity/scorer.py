@@ -42,7 +42,7 @@ class DignityScorer:
         "debilitation": 5,  # 0-5 range, using 5 as representative
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the dignity scorer."""
         pass
 

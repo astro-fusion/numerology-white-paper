@@ -1,19 +1,18 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: vedic-numerology-astrology
 Version: 0.1.0
 Summary: Computational Integration of Vedic Numerology and Sidereal Mechanics
-Home-page: https://github.com/yourusername/vedic-numerology-astrology
-Author: Norah Jones
-Author-email: author@example.com
-License: UNKNOWN
-Project-URL: Bug Tracker, https://github.com/yourusername/vedic-numerology-astrology/issues
-Project-URL: Documentation, https://vedic-numerology-astrology.readthedocs.io/
-Project-URL: Source Code, https://github.com/yourusername/vedic-numerology-astrology
-Keywords: numerology astrology vedic sidereal swiss-ephemeris pyswisseph lahiri-ayanamsa
-Platform: UNKNOWN
+Author-email: Norah Jones <author@example.com>
+Maintainer-email: Norah Jones <author@example.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/astro-fusion/numerology-white-paper
+Project-URL: Documentation, https://numerology-white-paper.readthedocs.io/
+Project-URL: Repository, https://github.com/astro-fusion/numerology-white-paper
+Project-URL: Bug Reports, https://github.com/astro-fusion/numerology-white-paper/issues
+Project-URL: Source, https://github.com/astro-fusion/numerology-white-paper
+Keywords: numerology,astrology,vedic,sidereal,swiss-ephemeris,pyswisseph,lahiri-ayanamsa
 Classifier: Development Status :: 3 - Alpha
 Classifier: Intended Audience :: Science/Research
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.8
@@ -25,26 +24,73 @@ Classifier: Topic :: Scientific/Engineering :: Mathematics
 Classifier: Topic :: Religion
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
-Provides-Extra: dev
-Provides-Extra: colab
-Provides-Extra: ephemeris
-Provides-Extra: all
 License-File: LICENSE
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: pandas>=1.3.0
+Requires-Dist: matplotlib>=3.4.0
+Requires-Dist: seaborn>=0.11.0
+Requires-Dist: pytz>=2021.1
+Requires-Dist: PyYAML>=6.0
+Requires-Dist: suntime>=1.2.5
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: isort>=5.10.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: sphinx>=5.0.0; extra == "dev"
+Requires-Dist: sphinx-rtd-theme>=1.0.0; extra == "dev"
+Requires-Dist: jupyter>=1.0.0; extra == "dev"
+Requires-Dist: notebook>=6.4.0; extra == "dev"
+Provides-Extra: colab
+Requires-Dist: plotly>=5.0.0; extra == "colab"
+Requires-Dist: ipywidgets>=7.6.0; extra == "colab"
+Requires-Dist: jupyter-widgets>=0.6.0; extra == "colab"
+Provides-Extra: ephemeris
+Requires-Dist: pyswisseph>=2.08.00-1; extra == "ephemeris"
+Dynamic: license-file
 
 # Vedic Numerology-Astrology Integration System
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yourusername/vedic-numerology-astrology/blob/main/notebooks/01_numerology_calculations.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/astro-fusion/numerology-white-paper/blob/main/notebooks/01_numerology_calculations.ipynb)
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Quarto](https://img.shields.io/badge/Quarto-1.3+-purple.svg)](https://quarto.org/)
+[![CI/CD](https://github.com/astro-fusion/numerology-white-paper/actions/workflows/ci.yml/badge.svg)](https://github.com/astro-fusion/numerology-white-paper/actions)
 
-A comprehensive Python package for integrating Vedic Numerology (Anka Jyotish) with Vedic Astrology (Parashari Jyotish) using Swiss Ephemeris calculations. This system provides quantitative analysis of how planetary positions support or contradict numerological potentials.
+A comprehensive computational framework for integrating Vedic Numerology (Anka Jyotish) with Vedic Astrology (Parashari Jyotish) using high-precision Swiss Ephemeris calculations. This system provides quantitative analysis of how planetary positions support or contradict numerological potentials through temporal analysis and interactive visualizations.
 
-## 🌟 Features
+## 🌟 Key Features
 
-- **Vedic Numerology**: Mulanka (Birth Number) and Bhagyanka (Destiny Number) calculations with sunrise correction
-- **Sidereal Astrology**: High-precision planetary positions using Swiss Ephemeris and Lahiri Ayanamsa
-- **Dignity Scoring**: 0-100 quantitative planetary strength analysis with classical Vedic parameters
-- **Temporal Analysis**: Visualize how numerological support changes over time
-- **Interactive Visualizations**: Charts and graphs for research and analysis
-- **Google Colab Ready**: Cloud-based execution with no local setup required
+### 🔢 **Vedic Numerology Engine**
+- **Mulanka (Birth Number)**: Sunrise-corrected birth number calculations
+- **Bhagyanka (Destiny Number)**: Destiny number analysis with planetary rulership
+- **Compound Numbers**: Advanced numerological combinations and interpretations
+
+### 🪐 **Sidereal Astrology Integration**
+- **Swiss Ephemeris Backend**: Astronomical precision with 0.1 arcsecond accuracy
+- **Lahiri Ayanamsa**: Traditional Chitra Paksha ayanamsa system
+- **Complete Birth Charts**: All planets, lunar nodes, and key points
+
+### 📊 **Dignity & Strength Analysis**
+- **Classical Dignity Scoring**: Moolatrikona, own sign, exaltation analysis
+- **Quantitative Strength Metrics**: 0-100 planetary power calculations
+- **Aspect Analysis**: Planetary relationships and influence patterns
+
+### 📈 **Temporal Dynamics**
+- **Support Trajectory Analysis**: How numerological support evolves over time
+- **Planetary Transit Effects**: Current planetary influences on natal potentials
+- **Life Period Analysis**: Major and sub-period influence mapping
+
+### 🎨 **Advanced Visualizations**
+- **Interactive Charts**: Plotly-powered dynamic visualizations
+- **Publication-Ready Graphics**: High-DPI static plots for research papers
+- **Comparative Analysis**: Side-by-side numerology vs. astrology comparisons
+
+### ☁️ **Multi-Platform Support**
+- **Google Colab Ready**: Zero-setup cloud execution
+- **Local Development**: Full local environment support
+- **Container Ready**: Docker and Podman compatibility
 
 ## 📋 Table of Contents
 
@@ -60,84 +106,201 @@ A comprehensive Python package for integrating Vedic Numerology (Anka Jyotish) w
 - [Contributing](#contributing)
 - [License](#license)
 
-## 🚀 Installation
+## 🚀 Quick Start
 
-### Option 1: Google Colab (Recommended for Beginners)
+### ⚡ 5-Minute Setup (Google Colab)
 
-1. Click the Colab badge above or go to [Google Colab](https://colab.research.google.com/)
-2. Upload and run the tutorial notebooks:
-   ```bash
-   # In Colab cell:
-   !pip install git+https://github.com/yourusername/vedic-numerology-astrology.git
+The fastest way to get started - no installation required!
+
+1. **Click the Colab Badge** above or visit [Google Colab](https://colab.research.google.com/)
+2. **Run the Installation**:
+   ```python
+   !pip install git+https://github.com/astro-fusion/numerology-white-paper.git
+   ```
+3. **Execute Your First Analysis**:
+   ```python
+   from vedic_numerology import analyze_birth_chart
+
+# Analyze any birth data
+analysis = analyze_birth_chart("1984-08-27", "10:30", 28.6139, 77.1025)
+mulanka = analysis.calculate_mulanka()
+print(f"Mulanka: {mulanka['number']} ({mulanka['planet']})")
    ```
 
-### Option 2: Local Installation
+### 🖥️ Local Development Setup
 
 #### Prerequisites
-- Python 3.8+
-- pip package manager
+- **Python 3.8+** - Core runtime
+- **Git** - Version control
+- **Quarto** (optional) - For building documentation
 
-#### Install Core Package
+#### One-Command Setup
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/vedic-numerology-astrology.git
-cd vedic-numerology-astrology
-
-# Install with pip
-pip install -e .
+# Clone and setup in one command
+git clone https://github.com/astro-fusion/numerology-white-paper.git
+cd numerology-white-paper
+make setup-dev
 ```
 
-#### Install with All Dependencies (Recommended)
+#### Manual Installation Steps
+
+**1. Clone Repository**
 ```bash
-# Install core dependencies
+git clone https://github.com/astro-fusion/numerology-white-paper.git
+cd numerology-white-paper
+```
+
+**2. Install Python Dependencies**
+```bash
+# Core dependencies only
 pip install -r requirements.txt
 
-# Or install with all optional dependencies
-pip install -e ".[all]"
-```
+# Full development setup (recommended)
+pip install -e ".[dev]"
 
-#### Install Google Colab Dependencies (for local Colab-like experience)
-```bash
+# Include Colab features
 pip install -r requirements-colab.txt
 ```
 
-## 💡 Quick Start
+**3. Install Swiss Ephemeris** (Required for astrology calculations)
+```bash
+# Ubuntu/Debian
+sudo apt-get update && sudo apt-get install -y libswisseph-dev
 
-### Basic Numerology Analysis
+# macOS with Homebrew
+brew install swisseph
+
+# Or install Python wrapper
+pip install pyswisseph>=2.08.00
+```
+
+**4. Verify Installation**
+```bash
+# Run quick test
+python -c "from vedic_numerology import analyze_birth_chart; print('✅ Installation successful!')"
+
+# Run test suite
+make test
+```
+
+### 🐳 Docker Setup (Advanced)
+
+For isolated development environments:
+
+```bash
+# Build container
+docker build -t vedic-numerology .
+
+# Run interactive session
+docker run -it --rm vedic-numerology
+
+# Mount local files
+docker run -it --rm -v $(pwd):/app vedic-numerology
+```
+
+## 💡 Usage Examples
+
+### 🔢 Basic Numerology Analysis
+
+Get started with fundamental numerological calculations:
 
 ```python
 from vedic_numerology import analyze_birth_chart
 
-# Analyze birth data
+# Analyze birth data (Delhi, India coordinates)
 analysis = analyze_birth_chart("1984-08-27", "10:30", 28.6139, 77.1025)
 
-# Get numerology results
-mulanka = analysis.calculate_mulanka()      # Returns: 9 (Mars)
-bhagyanka = analysis.calculate_bhagyanka()  # Returns: 3 (Jupiter)
+# Core numerology results
+mulanka = analysis.calculate_mulanka()        # Birth number: 9 (Mars)
+bhagyanka = analysis.calculate_bhagyanka()    # Destiny number: 3 (Jupiter)
 
-# Generate complete report
+print(f"🔢 Mulanka: {mulanka['number']} ({mulanka['planet']})")
+print(f"🎯 Bhagyanka: {bhagyanka['number']} ({bhagyanka['planet']})")
+
+# Generate comprehensive report
 report = analysis.generate_report()
 print(report)
 ```
 
-### Advanced Astrology Integration
+### 📊 Advanced Data Analysis Workflows
+
+#### Temporal Trend Analysis
+```python
+from vedic_numerology import VedicNumerologyAstrology
+from datetime import datetime
+
+# Analyze how numerological support changes over time
+vna = VedicNumerologyAstrology("1984-08-27", "10:30", 28.6139, 77.1025)
+
+# Generate time series data
+fig = vna.plot_temporal_support(
+    start_date="2024-01-01",
+    end_date="2024-12-31",
+    use_plotly=True
+)
+fig.show()
+```
+
+#### Comparative Studies
+```python
+# Compare multiple birth charts
+subjects = [
+    {"name": "Person A", "date": "1984-08-27", "time": "10:30", "lat": 28.6139, "lon": 77.1025},
+    {"name": "Person B", "date": "1990-05-15", "time": "14:20", "lat": 40.7128, "lon": -74.0060},
+]
+
+results = []
+for subject in subjects:
+    vna = VedicNumerologyAstrology(
+        birth_date=subject["date"],
+        birth_time=subject["time"],
+        latitude=subject["lat"],
+        longitude=subject["lon"]
+    )
+
+    analysis = vna.analyze_support_contradiction()
+    results.append({
+        "name": subject["name"],
+        "mulanka_support": analysis['mulanka']['support_level'],
+        "bhagyanka_support": analysis['bhagyanka']['support_level']
+    })
+
+# Create comparison visualization
+import plotly.express as px
+df = pd.DataFrame(results)
+fig = px.bar(df, x='name', y=['mulanka_support', 'bhagyanka_support'],
+             title="Comparative Numerological Support Analysis")
+fig.show()
+```
+
+### 🪐 Advanced Astrology Integration
+
+Combine numerology with full astrological analysis:
 
 ```python
 from vedic_numerology import VedicNumerologyAstrology
 
-# Create detailed analysis
+# Create detailed analysis object
 vna = VedicNumerologyAstrology(
     birth_date="1984-08-27",
     birth_time="10:30",
-    latitude=28.6139,    # Delhi
-    longitude=77.1025,   # Delhi
+    latitude=28.6139,    # Delhi latitude
+    longitude=77.1025,   # Delhi longitude
     ayanamsa_system="lahiri"
 )
 
 # Get planetary support analysis
 support_analysis = vna.analyze_support_contradiction()
-print(f"Mulanka Support: {support_analysis['mulanka']['support_level']}")
-print(f"Bhagyanka Support: {support_analysis['bhagyanka']['support_level']}")
+
+print("🎯 Numerological Support Analysis:")
+print(f"  Mulanka ({support_analysis['mulanka']['planet']}): {support_analysis['mulanka']['support_level']}")
+print(f"  Bhagyanka ({support_analysis['bhagyanka']['planet']}): {support_analysis['bhagyanka']['support_level']}")
+print(f"  Overall Harmony: {support_analysis['overall']['harmony_level']}")
+
+# Access detailed planetary data
+chart = vna.chart
+mars_dignity = vna.score_dignity('MARS')
+print(f"Mars dignity score: {mars_dignity['score']:.1f}/100 ({mars_dignity['dignity_type']})")
 ```
 
 ## 📊 Usage Examples
@@ -219,7 +382,7 @@ print(f"Dignity type: {mars_dignity['dignity_type']}")
 2. **Install the Package**:
    ```python
    # Run this in the first Colab cell
-   !pip install git+https://github.com/yourusername/vedic-numerology-astrology.git
+   !pip install git+https://github.com/astro-fusion/numerology-white-paper.git
    ```
 
 3. **Run Tutorial Notebooks**:
@@ -256,55 +419,332 @@ To share your analysis:
    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](YOUR_COLAB_LINK)
    ```
 
-## 💻 Local Development
+## 🚀 Deployment & Publishing
 
-### Development Setup
+### Multi-Format Publishing Strategy
 
-```bash
-# Clone repository
-git clone https://github.com/yourusername/vedic-numerology-astrology.git
-cd vedic-numerology-astrology
+Your research platform supports **three deployment channels** for maximum reach:
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\\Scripts\\activate
+#### 1. 📖 **Static Research Site** (GitHub Pages)
+- **Purpose**: Primary research dissemination
+- **Content**: Manuscripts, documentation, interactive components
+- **Access**: `https://astro-fusion.github.io/numerology-white-paper/`
 
-# Install in development mode
-pip install -e ".[dev]"
+#### 2. 🎮 **Interactive Web App** (Streamlit Cloud)
+- **Purpose**: Real-time exploration and analysis
+- **Features**: Live calculators, dynamic visualizations, data export
+- **Access**: `https://share.streamlit.io/astro-fusion/numerology-app/main/app.py`
 
-# Run tests
-pytest
+#### 3. 📚 **Academic Publications**
+- **PDF**: Traditional research paper format
+- **HTML**: Web-optimized with cross-references
+- **DOCX**: Collaborative editing format
 
-# Run specific test
-pytest tests/test_numerology.py::TestNumerologyCalculations::test_calculate_mulanka_basic
+### Automated Deployment
+
+#### GitHub Actions Workflows
+
+**Deploy Static Site:**
+```yaml
+# .github/workflows/deploy-platform.yml
+# Deploys to GitHub Pages automatically on main branch push
 ```
 
-### Running Jupyter Notebooks Locally
+**Manual Deployment Options:**
+```bash
+# Deploy everything
+gh workflow run deploy-platform.yml -f deploy_target=both
+
+# Deploy only static content
+gh workflow run deploy-platform.yml -f deploy_target=static-only
+
+# Deploy only interactive app
+gh workflow run deploy-platform.yml -f deploy_target=app-only
+```
+
+#### Local Deployment Testing
+
+**Test Static Site Locally:**
+```bash
+# Build all content
+make build-all
+
+# Serve locally
+cd _site && python -m http.server 8000
+# Visit: http://localhost:8000
+```
+
+**Test Streamlit App Locally:**
+```bash
+# Install Streamlit
+pip install streamlit
+
+# Run the app
+streamlit run app.py
+
+# Access at: http://localhost:8501
+```
+
+## 🛠️ Development & Building
+
+### Build System Overview
+
+This project uses a comprehensive build system inspired by modern documentation projects:
+
+- **📦 Build Scripts**: Automated building for multiple formats
+- **🔍 Quality Gates**: Automated code quality and testing
+- **📋 Make Targets**: Simplified development workflow
+- **🔄 CI/CD**: Automated testing and deployment
+
+### Quick Development Setup
 
 ```bash
-# Install Jupyter
-pip install jupyter notebook
+# One-command setup
+make setup-dev
+
+# Or manually:
+git clone https://github.com/astro-fusion/numerology-white-paper.git
+cd numerology-white-paper
+pip install -r requirements.txt
+pip install -e ".[dev]"
+```
+
+### Build Commands
+
+#### Using Make (Recommended)
+```bash
+# Show all available commands
+make help
+
+# Quick build (HTML + PDF)
+make build
+
+# Build specific formats
+make build-html    # HTML only
+make build-pdf     # PDF only
+make build-docx    # Word document
+
+# Quality checks
+make test         # Run tests
+make lint         # Code quality
+make format       # Auto-format code
+make quality-gate # Full quality check
+
+# Development
+make clean        # Clean build artifacts
+make docs         # Build API documentation
+```
+
+#### Using Build Scripts
+```bash
+# Simple single-format build
+./build.sh html
+
+# Comprehensive build with all checks
+./build-all.sh
+
+# Build including notebook execution
+./build-all.sh --notebooks
+
+# Check system requirements
+./build.sh check
+```
+
+### Development Workflow
+
+#### 1. **Local Development**
+```bash
+# Start with fresh environment
+make setup-dev
+
+# Work on code with auto-reload
+# Edit files in src/vedic_numerology/
+
+# Run tests continuously
+pytest-watch tests/
+
+# Preview manuscript changes
+quarto preview manuscript.qmd
+```
+
+#### 2. **Code Quality**
+```bash
+# Auto-format code
+make format
+
+# Run quality checks
+make quality-gate
+
+# Check specific files
+black --check src/vedic_numerology/calculator.py
+mypy src/vedic_numerology/calculator.py
+```
+
+#### 3. **Testing Strategy**
+```bash
+# Unit tests
+pytest tests/test_numerology.py -v
+
+# Integration tests
+pytest tests/test_integration.py -v
+
+# With coverage
+pytest --cov=vedic_numerology --cov-report=html
+
+# Open coverage report
+open htmlcov/index.html
+```
+
+#### 4. **Documentation**
+```bash
+# Build API docs
+make docs
+
+# Serve docs locally
+make serve-docs
+
+# Preview manuscript
+quarto preview manuscript.qmd
+```
+
+### Advanced Development
+
+#### Running Notebooks
+```bash
+# Execute all notebooks
+make build-notebooks
 
 # Start Jupyter server
 jupyter notebook
 
-# Open notebooks/01_numerology_calculations.ipynb
+# Open specific notebook
+# notebooks/01_numerology_calculations.ipynb
 ```
 
-### Code Quality
-
+#### Performance Profiling
 ```bash
-# Format code
-black src/ tests/
+# Profile specific function
+python -c "
+import cProfile
+from vedic_numerology import analyze_birth_chart
+cProfile.run('analyze_birth_chart(\"1984-08-27\", \"10:30\", 28.6139, 77.1025)')
+"
+```
 
-# Sort imports
-isort src/ tests/
+#### Debugging
+```bash
+# Debug specific test
+pytest tests/test_numerology.py::TestNumerologyCalculations::test_calculate_mulanka -s -v
 
-# Type checking
-mypy src/
+# Enable debug logging
+PYTHONPATH=src python -c "
+import logging
+logging.basicConfig(level=logging.DEBUG)
+# Your debug code here
+"
+```
 
-# Run full test suite
-pytest --cov=vedic_numerology --cov-report=html
+### Build Artifacts
+
+After successful builds, artifacts are available in:
+
+```
+_book/
+├── html/           # Web version with interactivity
+├── pdf/            # Print-ready PDF
+├── docx/           # Microsoft Word format
+└── epub/           # E-reader format
+
+htmlcov/            # Test coverage reports
+docs/_build/        # API documentation
+build-report-*.md   # Build logs and reports
+```
+
+### Troubleshooting
+
+#### Build Issues
+```bash
+# Check Quarto installation
+quarto check
+
+# Validate YAML configuration
+python -c "import yaml; yaml.safe_load(open('_quarto.yml'))"
+
+# Test Python imports
+python -c "from vedic_numerology import analyze_birth_chart"
+```
+
+#### PDF Build Problems
+```bash
+# Install/update TinyTeX
+quarto install tinytex
+
+# Check LaTeX packages
+tlmgr install geometry fontspec
+
+# Debug PDF build
+quarto render manuscript.qmd --to pdf --log-level debug
+```
+
+#### Test Failures
+```bash
+# Run with detailed output
+pytest -v --tb=long
+
+# Debug specific failure
+pytest tests/test_numerology.py -k "mulanka" -s
+
+# Check dependencies
+pip check
+```
+
+## 🌐 Interactive Research Platform
+
+Your project now supports **multiple deployment formats** for maximum accessibility and engagement:
+
+### 📊 **1. Static Research Publications**
+- **PDF Downloads**: Traditional academic paper format for citations and printing
+- **HTML Manuscripts**: Web-optimized versions with cross-references and navigation
+- **DOCX Format**: Microsoft Word compatible for collaborative editing
+
+### 🎮 **2. Interactive Web Experience**
+- **Embedded Interactive Components**: Live calculators and visualizations in the manuscript
+- **Streamlit Web App**: Full-featured application with real-time controls
+- **Dynamic Visualizations**: Plotly-powered charts that respond to user input
+
+### 🔧 **3. Developer Resources**
+- **API Documentation**: Complete Sphinx-generated documentation
+- **Jupyter Notebooks**: Executable computational narratives
+- **Google Colab Integration**: Zero-setup cloud execution
+
+## 📄 Research Content Formats
+
+### Academic Publications
+```bash
+# Generate all formats
+make build
+
+# Individual formats
+make build-pdf     # Research paper PDF
+make build-html    # Web manuscript
+make build-docx    # Word document
+```
+
+### Interactive Experience
+```bash
+# Run local Streamlit app
+streamlit run app.py
+
+# Access interactive components
+# Visit: manuscript.html#interactive-controls
+```
+
+### Developer Documentation
+```bash
+# Build API docs
+make docs
+
+# View at: docs/_build/html/index.html
 ```
 
 ## 📄 PDF Report Generation
@@ -395,10 +835,58 @@ with open('analysis_report.txt', 'w') as f:
     f.write(report)
 ```
 
+## 📊 Generated Reports and PDFs
+
+### Automated Workflow Artifacts
+
+This repository includes automated workflows that generate research manuscripts and analysis reports. The following artifacts are available as GitHub Actions outputs:
+
+#### 📋 Research Manuscript PDF
+- **File**: `manuscript.pdf`
+- **Workflow**: [Research PDF Generation](https://github.com/astro-fusion/numerology-white-paper/actions/workflows/research-pdf.yml)
+- **Contents**: Complete research paper with integrated analysis results
+- **Download**: Available as workflow artifact `research-manuscript-pdf`
+
+#### 📈 Analysis Reports
+- **File**: `research_results.json`
+- **Workflow**: [Research PDF Generation](https://github.com/astro-fusion/numerology-white-paper/actions/workflows/research-pdf.yml)
+- **Contents**: Raw analysis data and computational results
+- **Download**: Available as workflow artifact `research-data-reports`
+
+#### 📊 Research Summary
+- **File**: `RESEARCH_SUMMARY.md`
+- **Workflow**: [Publish Research](https://github.com/astro-fusion/numerology-white-paper/actions/workflows/publish-research.yml)
+- **Contents**: Executive summary of research findings and methodology
+- **Download**: Available as workflow artifact `research-release-artifacts`
+
+#### 📉 Data Analysis Results
+- **File**: `analysis_results/` (directory)
+- **Workflow**: [Data Analysis](https://github.com/astro-fusion/numerology-white-paper/actions/workflows/data-analysis.yml)
+- **Contents**: Statistical analysis and research data processing results
+- **Download**: Available as workflow artifact `data-analysis-results-{run_number}`
+
+### Accessing Generated Files
+
+#### From GitHub Actions
+1. Go to the [Actions tab](https://github.com/astro-fusion/numerology-white-paper/actions)
+2. Click on the latest successful workflow run
+3. Scroll down to the "Artifacts" section
+4. Download the desired artifact files
+
+#### From Latest Release
+- Visit the [Releases page](https://github.com/astro-fusion/numerology-white-paper/releases)
+- Download the latest release assets which include compiled PDFs and reports
+
+#### Automated Generation
+Workflows automatically generate these files on:
+- Push to `main` branch (research PDFs)
+- Manual workflow dispatch (custom analysis)
+- Release creation (comprehensive research packages)
+
 ## 📁 Project Structure
 
 ```
-vedic-numerology-astrology/
+numerology-white-paper/
 ├── src/vedic_numerology/          # Main package
 │   ├── numerology/                 # Numerology calculations
 │   ├── astrology/                  # Astronomical calculations
@@ -495,11 +983,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/vedic-numerology-astrology/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/vedic-numerology-astrology/discussions)
-- **Documentation**: [Read the Docs](https://vedic-numerology-astrology.readthedocs.io/)
+- **Issues**: [GitHub Issues](https://github.com/astro-fusion/numerology-white-paper/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/astro-fusion/numerology-white-paper/discussions)
+- **Documentation**: [Read the Docs](https://numerology-white-paper.readthedocs.io/)
 
 ---
 
 **Note**: This system is designed for research and educational purposes. Always consult qualified astrologers for personal astrological advice.
-

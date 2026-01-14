@@ -27,6 +27,7 @@ try:
     PLOTLY_AVAILABLE = True
 except ImportError:
     PLOTLY_AVAILABLE = False
+    go = Any  # type: ignore
 
 from ..config.constants import Planet
 
@@ -138,7 +139,7 @@ def _plot_temporal_support_plotly(
     dates: List[datetime],
     scores: List[float],
     baseline_score: Optional[float],
-) -> go.Figure:
+) -> Any:
     """
     Create interactive Plotly temporal support graph.
 
@@ -284,7 +285,7 @@ def _plot_temporal_support_matplotlib(
     return ax
 
 
-def _add_support_zones_plotly(fig: go.Figure, dates: List[datetime]) -> None:
+def _add_support_zones_plotly(fig: Any, dates: List[datetime]) -> None:
     """Add colored support zones to Plotly figure."""
     date_range = [dates[0], dates[-1]]
 

@@ -69,9 +69,10 @@ The fastest way to get started - no installation required!
    ```python
    from vedic_numerology import analyze_birth_chart
 
-   # Analyze any birth data
-   result = analyze_birth_chart("1984-08-27", "10:30", 28.6139, 77.1025)
-   print(f"Mulanka: {result['mulanka']['number']} ({result['mulanka']['planet']})")
+# Analyze any birth data
+analysis = analyze_birth_chart("1984-08-27", "10:30", 28.6139, 77.1025)
+mulanka = analysis.calculate_mulanka()
+print(f"Mulanka: {mulanka['number']} ({mulanka['planet']})")
    ```
 
 ### 🖥️ Local Development Setup
@@ -158,11 +159,11 @@ from vedic_numerology import analyze_birth_chart
 analysis = analyze_birth_chart("1984-08-27", "10:30", 28.6139, 77.1025)
 
 # Core numerology results
-mulanka = analysis['mulanka']        # Birth number: 9 (Mars)
-bhagyanka = analysis['bhagyanka']    # Destiny number: 3 (Jupiter)
+mulanka = analysis.calculate_mulanka()        # Birth number: 9 (Mars)
+bhagyanka = analysis.calculate_bhagyanka()    # Destiny number: 3 (Jupiter)
 
 print(f"🔢 Mulanka: {mulanka['number']} ({mulanka['planet']})")
-print(f🎯 Bhagyanka: {bhagyanka['number']} ({bhagyanka['planet']})")
+print(f"🎯 Bhagyanka: {bhagyanka['number']} ({bhagyanka['planet']})")
 
 # Generate comprehensive report
 report = analysis.generate_report()

@@ -23,6 +23,7 @@ try:
     PLOTLY_AVAILABLE = True
 except ImportError:
     PLOTLY_AVAILABLE = False
+    go = Any  # type: ignore
 
 from ..config.constants import Planet
 
@@ -342,7 +343,7 @@ def _calculate_nakshatra_factor(planet_data: Dict) -> float:
 
 def _plot_radar_plotly(
     planet: Planet, factors: List[str], values: Dict[str, float]
-) -> go.Figure:
+) -> Any:
     """
     Create Plotly radar chart for single planet dignity factors.
 
@@ -447,7 +448,7 @@ def _plot_multi_radar_plotly(
     planets: List[Planet],
     factors: List[str],
     all_values: Dict[Planet, Dict[str, float]],
-) -> go.Figure:
+) -> Any:
     """
     Create Plotly radar chart comparing multiple planets.
 

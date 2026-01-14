@@ -24,6 +24,7 @@ try:
     PLOTLY_AVAILABLE = True
 except ImportError:
     PLOTLY_AVAILABLE = False
+    go = Any  # type: ignore
 
 from ..config.constants import Planet
 
@@ -108,7 +109,7 @@ def _plot_comparison_plotly(
     bhagyanka_score: float,
     mulanka_planet: Optional[Planet],
     bhagyanka_planet: Optional[Planet],
-) -> go.Figure:
+) -> Any:
     """
     Create Plotly bar chart for Mulanka vs Bhagyanka comparison.
 
@@ -403,7 +404,7 @@ def _estimate_position_strength(planet: Planet, sign: int) -> float:
 
 def _plot_strength_factors_plotly(
     factors: Dict[str, Dict], mulanka_planet: Planet, bhagyanka_planet: Planet
-) -> go.Figure:
+) -> Any:
     """
     Create Plotly radar chart for strength factors comparison.
 

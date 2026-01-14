@@ -235,7 +235,9 @@ def get_ayanamsa_info(
     return {
         "system": system.value if isinstance(system, AyanamsaSystem) else system,
         "ayanamsa": ayanamsa,
-        "description": system_descriptions.get(cast(Any, system), "Unknown Ayanamsa system"),
+        "description": system_descriptions.get(
+            cast(Any, system), "Unknown Ayanamsa system"
+        ),
     }
 
 

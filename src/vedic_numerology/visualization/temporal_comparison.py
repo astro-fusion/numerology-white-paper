@@ -28,6 +28,7 @@ try:
     PLOTLY_AVAILABLE = True
 except ImportError:
     PLOTLY_AVAILABLE = False
+    go = Any  # type: ignore
 
 from ..config.constants import PLANET_NAMES, Planet
 
@@ -210,7 +211,7 @@ def _plot_comparison_plotly(
     num_col: str,
     ast_col: str,
     save_path: Optional[str] = None,
-) -> go.Figure:
+) -> Any:
     """Create Plotly comparison plot for a single planet."""
     fig = go.Figure()
 
@@ -324,7 +325,9 @@ def _plot_comparison_matplotlib(
     return ax
 
 
-def _plot_all_planets_plotly(data: pd.DataFrame, save_path: Optional[str] = None) -> go.Figure:
+def _plot_all_planets_plotly(
+    data: pd.DataFrame, save_path: Optional[str] = None
+) -> Any:
     """Create Plotly overview plot showing all planets."""
     planets = [
         Planet.SUN,
@@ -481,7 +484,7 @@ def _plot_all_planets_matplotlib(
 
 def _plot_correlation_plotly(
     data: pd.DataFrame, planets: List[Planet], save_path: Optional[str] = None
-) -> go.Figure:
+) -> Any:
     """Create Plotly correlation analysis plot."""
     # Calculate correlations for each planet
     correlations = []
@@ -636,7 +639,9 @@ def _plot_correlation_matplotlib(
     return fig
 
 
-def _plot_moon_highlight_plotly(data: pd.DataFrame, save_path: Optional[str] = None) -> go.Figure:
+def _plot_moon_highlight_plotly(
+    data: pd.DataFrame, save_path: Optional[str] = None
+) -> Any:
     """Create Plotly moon movement highlight plot."""
     fig = go.Figure()
 
@@ -768,7 +773,7 @@ def _plot_moon_highlight_matplotlib(
     return ax
 
 
-def _add_support_zones_plotly(fig: go.Figure, dates: pd.Series) -> None:
+def _add_support_zones_plotly(fig: Any, dates: pd.Series) -> None:
     """Add colored support zones to Plotly figure."""
     date_range = [dates.min(), dates.max()]
 

@@ -1,7 +1,6 @@
 LICENSE
 README.md
 pyproject.toml
-setup.py
 src/vedic_numerology/__init__.py
 src/vedic_numerology/astrology/__init__.py
 src/vedic_numerology/astrology/ayanamsa.py
@@ -30,3 +29,7 @@ src/vedic_numerology_astrology.egg-info/dependency_links.txt
 src/vedic_numerology_astrology.egg-info/entry_points.txt
 src/vedic_numerology_astrology.egg-info/requires.txt
 src/vedic_numerology_astrology.egg-info/top_level.txt
+tests/test_astrology.py
+tests/test_dignity.py
+tests/test_integration.py
+tests/test_numerology.py

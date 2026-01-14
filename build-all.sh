@@ -106,7 +106,7 @@ setup_python() {
     fi
 
     # Install development dependencies if building docs
-    if [ "$BUILD_DOCS" = "true" ] && [ -f "pyproject.toml" ]; then
+    if [ "$build_documentation" = "true" ] && [ -f "pyproject.toml" ]; then
         log_info "Installing development dependencies..."
         pip install -e ".[dev]"
     fi

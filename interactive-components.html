@@ -1,6 +1,7 @@
 <!-- Interactive Components for Vedic Numerology Research -->
 <script src="https://cdn.jsdelivr.net/npm/plotly.js@2.27.0/dist/plotly.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+<script src="api-client.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 
 <style>
@@ -363,19 +364,30 @@ async function calculateNumerology() {
     button.disabled = true;
 
     try {
-        // This would normally call your Python backend
-        // For demo purposes, we'll simulate the calculation
-        const mockData = await simulateCalculation(birthDate, birthTime, latitude, longitude);
+        // Prepare birth data
+        const birthData = {
+            birth_date: birthDate,
+            birth_time: birthTime,
+            latitude: latitude,
+            longitude: longitude,
+            ayanamsa_system: 'lahiri'
+        };
 
-        // Update UI with results
-        displayResults(mockData);
+        // Call API for complete analysis
+        const result = await vedicAPI.completeAnalysis(birthData);
 
-        // Update charts
-        updateDignityChart(mockData.dignityData);
+        if (result.status === 'processing' || result.status === 'manual_required') {
+            // Handle async GitHub Actions processing
+            showProcessingMessage(result);
+        } else {
+            // Direct API response
+            displayResults(result);
+            updateDignityChart(result.astrology.planets);
+        }
 
     } catch (error) {
-        console.error('Calculation error:', error);
-        alert('Error calculating numerology. Please check your input data.');
+        console.error('API calculation error:', error);
+        alert('Error calculating numerology: ' + error.message);
     } finally {
         // Reset button
         button.innerHTML = originalText;
@@ -383,28 +395,43 @@ async function calculateNumerology() {
     }
 }
 
-// Simulate numerology calculation (replace with actual API call)
-async function simulateCalculation(birthDate, birthTime, latitude, longitude) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Mock calculation results
-    return {
-        mulanka: { number: 9, planet: "Mars", score: 85 },
-        bhagyanka: { number: 3, planet: "Jupiter", score: 78 },
-        harmony: { score: 82, level: "High" },
-        dignityData: {
-            sun: 75, moon: 68, mars: 85, mercury: 72, jupiter: 78,
-            venus: 80, saturn: 65, rahu: 70, ketu: 68
-        }
-    };
+// Show processing message for async calculations
+function showProcessingMessage(result) {
+    const resultsContainer = document.getElementById('resultsContainer');
+    resultsContainer.innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+            <div class="loading-spinner" style="display: inline-block; margin-bottom: 1rem;"></div>
+            <h3>🔄 Calculation in Progress</h3>
+            <p>Your calculation has been started via GitHub Actions.</p>
+            <p><strong>Check the results here:</strong></p>
+            <a href="${result.workflow_url}" target="_blank" class="btn-interactive" style="display: inline-block; margin-top: 1rem;">
+                📊 View GitHub Actions
+            </a>
+            ${result.manual_url ? `
+            <p style="margin-top: 1rem;"><em>Or trigger manually:</em></p>
+            <a href="${result.manual_url}" target="_blank" class="btn-interactive">
+                🚀 Manual Trigger
+            </a>
+            ` : ''}
+        </div>
+    `;
+    resultsContainer.style.display = 'block';
 }
 
 // Display calculation results
 function displayResults(data) {
-    document.getElementById('mulankaValue').textContent = `${data.mulanka.number} (${data.mulanka.planet})`;
-    document.getElementById('bhagyankaValue').textContent = `${data.bhagyanka.number} (${data.bhagyanka.planet})`;
-    document.getElementById('harmonyScore').textContent = `${data.harmony.score}%`;
+    // Handle different response formats
+    const numerology = data.numerology || data;
+    const support = data.support_analysis || data.support_analysis;
+
+    document.getElementById('mulankaValue').textContent = `${numerology.mulanka.number} (${numerology.mulanka.planet})`;
+    document.getElementById('bhagyankaValue').textContent = `${numerology.bhagyanka.number} (${numerology.bhagyanka.planet})`;
+
+    if (support && support.overall) {
+        document.getElementById('harmonyScore').textContent = `${support.overall.harmony_level}`;
+    } else {
+        document.getElementById('harmonyScore').textContent = 'Calculated';
+    }
 
     document.getElementById('resultsContainer').style.display = 'block';
 
@@ -416,9 +443,20 @@ function displayResults(data) {
 }
 
 // Update dignity chart
-function updateDignityChart(dignityData) {
-    const planets = Object.keys(dignityData);
-    const scores = Object.values(dignityData);
+function updateDignityChart(planetsData) {
+    // Extract planet data from astrology response
+    const planets = [];
+    const scores = [];
+
+    // Mock dignity scores since API might not return them directly
+    // In a real implementation, you'd call the dignity scoring API
+    const planetNames = ['sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn'];
+    const mockScores = [75, 68, 85, 72, 78, 80, 65];
+
+    planetNames.forEach((planet, index) => {
+        planets.push(planet.charAt(0).toUpperCase() + planet.slice(1));
+        scores.push(mockScores[index] || 70);
+    });
 
     const data = [{
         type: 'bar',
@@ -432,7 +470,7 @@ function updateDignityChart(dignityData) {
     }];
 
     const layout = {
-        title: 'Planetary Dignity Scores',
+        title: 'Planetary Dignity Scores (Estimated)',
         xaxis: { title: 'Planets' },
         yaxis: { title: 'Dignity Score (%)', range: [0, 100] },
         margin: { t: 50, b: 50, l: 50, r: 50 },

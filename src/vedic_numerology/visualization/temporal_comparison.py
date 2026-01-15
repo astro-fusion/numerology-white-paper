@@ -6,8 +6,7 @@ Demonstrates the fundamental difference between discrete numerological changes
 and gradual astrological movements.
 """
 
-from datetime import date, datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Union
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
@@ -691,7 +690,11 @@ def _plot_moon_highlight_plotly(
         fig.add_vline(x=change_date, line_dash="dot", line_color="red", opacity=0.7)
 
     fig.update_layout(
-        title="Moon Movement: Astrology vs Numerology<br><sub>Red dots: Astrology sign changes (~every 2.5 days) | Blue: Numerology active days</sub>",
+        title=(
+            "Moon Movement: Astrology vs Numerology<br>"
+            "<sub>Red dots: Astrology sign changes (~every 2.5 days) | "
+            "Blue: Numerology active days</sub>"
+        ),
         xaxis_title="Date (3 Months)",
         yaxis_title="Moon Strength (0-100)",
         yaxis_range=[0, 105],
@@ -750,7 +753,9 @@ def _plot_moon_highlight_matplotlib(
             )
 
     ax.set_title(
-        "Moon Movement: Astrology vs Numerology\nRed lines: Astrology sign changes (~every 2.5 days) | Blue: Numerology active days",
+        "Moon Movement: Astrology vs Numerology\n"
+        "Red lines: Astrology sign changes (~every 2.5 days) | "
+        "Blue: Numerology active days",
         fontsize=14,
         fontweight="bold",
     )

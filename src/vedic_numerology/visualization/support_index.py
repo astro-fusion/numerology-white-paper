@@ -22,7 +22,6 @@ except ImportError:
 
 try:
     import plotly.graph_objects as go
-    from plotly.subplots import make_subplots
 
     PLOTLY_AVAILABLE = True
 except ImportError:
@@ -125,7 +124,7 @@ def _calculate_temporal_scores(
             dates.append(current_date)
             scores.append(score)
 
-        except Exception as e:
+        except Exception:
             # Skip problematic dates
             pass
 

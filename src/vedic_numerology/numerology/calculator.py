@@ -10,8 +10,7 @@ The calculator handles the mathematical operations that form the foundation
 of numerological analysis in the Vedic tradition.
 """
 
-import math
-from datetime import date, datetime, time
+from datetime import date, time
 from typing import Optional, Tuple, Union
 
 from .planet_mapping import Planet, get_planet_from_number
@@ -212,15 +211,17 @@ def get_numerology_relationship(mulanka_num: int, bhagyanka_num: int) -> str:
         raise ValueError(f"Bhagyanka must be 1-9, got {bhagyanka_num}")
 
     if mulanka_num == bhagyanka_num:
-        return "Harmonic Unity: Personality and destiny are aligned - strong potential for self-actualization"
+        return (
+            "Harmonic Unity: Personality and destiny are aligned - "
+            "strong potential for self-actualization"
+        )
 
     # Check for complementary numbers (summing to 10)
     if mulanka_num + bhagyanka_num == 10:
-        return "Complementary Balance: Personality and destiny complement each other perfectly"
-
-    # Get planets for deeper analysis
-    mulanka_planet = get_planet_from_number(mulanka_num)
-    bhagyanka_planet = get_planet_from_number(bhagyanka_num)
+        return (
+            "Complementary Balance: Personality and destiny "
+            "complement each other perfectly"
+        )
 
     # This would be enhanced with planetary friendship analysis
     # For now, provide basic analysis
@@ -231,4 +232,7 @@ def get_numerology_relationship(mulanka_num: int, bhagyanka_num: int) -> str:
     elif diff >= 6:
         return "Dynamic Tension: Personality and destiny present significant challenges"
     else:
-        return "Balanced Growth: Personality and destiny offer opportunities for development"
+        return (
+            "Balanced Growth: Personality and destiny offer "
+            "opportunities for development"
+        )

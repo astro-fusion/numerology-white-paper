@@ -320,9 +320,8 @@ async def general_exception_handler(request, exc):
     import traceback
     import logging
 
-    # Log the full exception details
-    logging.error(f"Unhandled exception: {exc}")
-    logging.error("".join(traceback.format_tb(exc.__traceback__)))
+    # Log the full exception details with traceback
+    logging.exception(f"Unhandled exception in request to {request.url}: {exc}")
 
     return {
         "error": "Internal server error",

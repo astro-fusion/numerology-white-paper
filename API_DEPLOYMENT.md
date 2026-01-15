@@ -77,7 +77,7 @@ This guide explains how to deploy the REST API for real-time numerology and astr
      }'
    ```
 
-   ⚠️ **Security Warning**: Use fine-grained personal access tokens with minimum required scopes (e.g., `repo` scope for repository dispatches). Avoid using tokens with broad permissions. This API is intended for backend-to-backend integration, not direct browser usage.
+   ⚠️ **Security Warning**: Always use fine-grained personal access tokens with the minimum required scopes. For repository dispatches, use tokens with only the `repo` scope. Avoid using classic personal access tokens with broad permissions like `repo`, `public_repo`, or `admin:repo_hook` unless absolutely necessary. This API is intended for backend-to-backend integration, not direct browser usage. Never expose tokens in client-side code or public repositories.
 
 2. **Monitor Results**: Check GitHub Actions runs for results
 

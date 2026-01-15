@@ -965,6 +965,8 @@ curl -X POST \
   -d '{"event_type": "calculate-numerology", "client_payload": {"birth_date": "1984-08-27"}}'
 ```
 
+> **⚠️ Security Note**: Use fine-grained personal access tokens with minimum required scopes. See [API_DEPLOYMENT.md](API_DEPLOYMENT.md) for detailed security guidelines.
+
 #### 🎮 **Streamlit Web App**
 ```bash
 # Interactive web application

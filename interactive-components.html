@@ -442,26 +442,187 @@ function displayResults(data) {
     });
 }
 
+// Planetary dignity scoring constants (based on Vedic astrology)
+const DIGNITY_SCORES = {
+    exaltation: 100,
+    moolatrikona: 90,
+    own_sign: 75,
+    great_friend: 65,
+    friend: 50,
+    neutral: 40,
+    enemy: 25,
+    great_enemy: 10,
+    debilitation: 5
+};
+
+// Exaltation degrees (where planets are strongest)
+const EXALTATION_DEGREES = {
+    'Sun': 10,      // Aries 10°
+    'Moon': 33,     // Taurus 3°
+    'Mars': 28,     // Capricorn 28°
+    'Mercury': 15,  // Virgo 15°
+    'Jupiter': 5,   // Cancer 5°
+    'Venus': 27,    // Pisces 27°
+    'Saturn': 20    // Libra 20°
+};
+
+// Debilitation degrees (where planets are weakest)
+const DEBILITATION_DEGREES = {
+    'Sun': 190,     // Libra 10°
+    'Moon': 213,    // Scorpio 3°
+    'Mars': 118,    // Cancer 28°
+    'Mercury': 345, // Pisces 15°
+    'Jupiter': 245, // Capricorn 5°
+    'Venus': 177,   // Virgo 27°
+    'Saturn': 290   // Aries 20°
+};
+
+// Moolatrikona signs (special own signs)
+const MOOLATRIKONA_SIGNS = {
+    'Sun': [4],     // Leo
+    'Moon': [1],    // Taurus
+    'Mars': [0, 7], // Aries, Scorpio
+    'Mercury': [2, 5], // Gemini, Virgo
+    'Jupiter': [8, 11], // Sagittarius, Pisces
+    'Venus': [1, 6], // Taurus, Libra
+    'Saturn': [9, 10] // Capricorn, Aquarius
+};
+
+// Own signs (ruling signs)
+const OWN_SIGNS = {
+    'Sun': [4],     // Leo
+    'Moon': [3],    // Cancer
+    'Mars': [0, 7], // Aries, Scorpio
+    'Mercury': [2, 5], // Gemini, Virgo
+    'Jupiter': [8, 11], // Sagittarius, Pisces
+    'Venus': [1, 6], // Taurus, Libra
+    'Saturn': [9, 10] // Capricorn, Aquarius
+};
+
+// Friendship relationships
+const FRIENDSHIP_MATRIX = {
+    'Sun': { friends: ['Moon', 'Mars', 'Jupiter'], enemies: ['Venus', 'Saturn'], neutrals: ['Mercury'] },
+    'Moon': { friends: ['Sun', 'Mercury'], enemies: [], neutrals: ['Mars', 'Jupiter', 'Venus', 'Saturn'] },
+    'Mars': { friends: ['Sun', 'Moon', 'Jupiter'], enemies: ['Mercury'], neutrals: ['Venus', 'Saturn'] },
+    'Mercury': { friends: ['Sun', 'Venus'], enemies: ['Moon'], neutrals: ['Mars', 'Jupiter', 'Saturn'] },
+    'Jupiter': { friends: ['Sun', 'Moon', 'Mars'], enemies: ['Mercury', 'Venus'], neutrals: ['Saturn'] },
+    'Venus': { friends: ['Mercury', 'Saturn'], enemies: ['Sun', 'Moon'], neutrals: ['Mars', 'Jupiter'] },
+    'Saturn': { friends: ['Mercury', 'Venus'], enemies: ['Sun', 'Moon', 'Mars'], neutrals: ['Jupiter'] }
+};
+
+// Calculate dignity score for a planet
+function calculateDignityScore(planetName, longitude, signIndex) {
+    // Check exaltation (highest priority)
+    if (isInExaltation(longitude, planetName)) {
+        return DIGNITY_SCORES.exaltation;
+    }
+
+    // Check debilitation (lowest priority)
+    if (isInDebilitation(longitude, planetName)) {
+        return DIGNITY_SCORES.debilitation;
+    }
+
+    // Check moolatrikona
+    if (isInMoolatrikona(longitude, planetName)) {
+        return DIGNITY_SCORES.moolatrikona;
+    }
+
+    // Check own sign
+    if (isInOwnSign(longitude, planetName)) {
+        return DIGNITY_SCORES.own_sign;
+    }
+
+    // Check friendship with sign lord
+    return calculateFriendshipScore(planetName, signIndex);
+}
+
+// Check if planet is in exaltation
+function isInExaltation(longitude, planetName) {
+    const exaltationDegree = EXALTATION_DEGREES[planetName];
+    if (!exaltationDegree) return false;
+
+    // Allow 1-degree orb for exaltation
+    return Math.abs(longitude - exaltationDegree) <= 1;
+}
+
+// Check if planet is in debilitation
+function isInDebilitation(longitude, planetName) {
+    const debilitationDegree = DEBILITATION_DEGREES[planetName];
+    if (!debilitationDegree) return false;
+
+    // Allow 1-degree orb for debilitation
+    return Math.abs(longitude - debilitationDegree) <= 1;
+}
+
+// Check if planet is in moolatrikona
+function isInMoolatrikona(longitude, planetName) {
+    const moolatrikonaSigns = MOOLATRIKONA_SIGNS[planetName];
+    if (!moolatrikonaSigns) return false;
+
+    const signIndex = Math.floor(longitude / 30);
+    return moolatrikonaSigns.includes(signIndex);
+}
+
+// Check if planet is in own sign
+function isInOwnSign(longitude, planetName) {
+    const ownSigns = OWN_SIGNS[planetName];
+    if (!ownSigns) return false;
+
+    const signIndex = Math.floor(longitude / 30);
+    return ownSigns.includes(signIndex);
+}
+
+// Calculate friendship score
+function calculateFriendshipScore(planetName, signIndex) {
+    // Get sign lord
+    const signLord = getSignLord(signIndex);
+    if (!signLord) return DIGNITY_SCORES.neutral;
+
+    const friendship = FRIENDSHIP_MATRIX[planetName];
+    if (!friendship) return DIGNITY_SCORES.neutral;
+
+    if (friendship.friends.includes(signLord)) {
+        return DIGNITY_SCORES.friend;
+    } else if (friendship.enemies.includes(signLord)) {
+        return DIGNITY_SCORES.enemy;
+    } else {
+        return DIGNITY_SCORES.neutral;
+    }
+}
+
+// Get ruling planet of a sign
+function getSignLord(signIndex) {
+    const signLords = ['Mars', 'Venus', 'Mercury', 'Moon', 'Sun', 'Mercury',
+                      'Venus', 'Mars', 'Jupiter', 'Saturn', 'Saturn', 'Jupiter'];
+    return signLords[signIndex];
+}
+
 // Update dignity chart
 function updateDignityChart(planetsData) {
-    // Extract planet data from astrology response
     const planets = [];
     const scores = [];
 
-    // If we have astrology data, extract dignity scores
+    // If we have astrology data, calculate real dignity scores
     if (planetsData && typeof planetsData === 'object') {
-        Object.entries(planetsData).forEach(([planetName, planetInfo]) => {
-            if (planetInfo && typeof planetInfo === 'object') {
-                // For now, use a simple scoring based on sign placement
-                // In a full implementation, this would call the dignity scoring algorithm
-                const dignityScore = Math.floor(Math.random() * 40) + 60; // Mock 60-100 range
-                planets.push(planetName.charAt(0).toUpperCase() + planetName.slice(1));
+        // Only process traditional planets (exclude nodes if present)
+        const traditionalPlanets = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
+
+        traditionalPlanets.forEach(planetName => {
+            const planetInfo = planetsData[planetName];
+            if (planetInfo && typeof planetInfo === 'object' && planetInfo.longitude !== undefined) {
+                const dignityScore = calculateDignityScore(
+                    planetName,
+                    planetInfo.longitude,
+                    planetInfo.sign
+                );
+
+                planets.push(planetName);
                 scores.push(dignityScore);
             }
         });
     }
 
-    // Fallback to default planets if no data
+    // Fallback to default planets if no valid data
     if (planets.length === 0) {
         const planetNames = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
         const mockScores = [75, 68, 85, 72, 78, 80, 65];
